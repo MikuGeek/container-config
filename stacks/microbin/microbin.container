@@ -1,0 +1,29 @@
+[Unit]
+Description=Microbin
+After=microbin-pod.service tailscale-microbin.service
+Requires=microbin-pod.service tailscale-microbin.service
+
+[Container]
+Image=docker.io/danielszabo99/microbin:latest
+ContainerName=microbin
+Pod=microbin.pod
+
+Environment=MICROBIN_EDITABLE=true
+Environment=MICROBIN_ETERNAL_PASTA=true
+Environment=MICROBIN_QR=true
+Environment=MICROBIN_WIDE=true
+Environment=MICROBIN_NO_LISTING=false
+Environment=MICROBIN_HIGHLIGHTSYNTAX=true
+Environment=MICROBIN_PUBLIC_PATH=https://microbin.python-everest.ts.net
+Environment=MICROBIN_BIND=0.0.0.0
+Environment=MICROBIN_PORT=8080
+
+Volume=%h/container-data/microbin/data:/app/microbin_data:Z,U
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

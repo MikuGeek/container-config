@@ -1,0 +1,8 @@
+[Unit]
+Description=Pod for n8n
+
+[Pod]
+PodName=n8n
+
+[Install]
+WantedBy=default.target

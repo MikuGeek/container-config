@@ -1,0 +1,26 @@
+[Unit]
+Description=metapi
+After=metapi-pod.service tailscale-metapi.service
+Requires=metapi-pod.service tailscale-metapi.service
+
+[Container]
+Image=docker.io/1467078763/metapi:latest
+ContainerName=metapi
+Pod=metapi.pod
+
+Environment="CHECKIN_CRON=0 2 * * *"
+Environment="BALANCE_REFRESH_CRON=0 * * * *"
+Environment=PORT=4000
+Environment=DATA_DIR=/app/data
+Environment=TZ=Asia/Hong_Kong
+EnvironmentFile=%h/container-config/stacks/metapi/.env.app
+
+Volume=%h/container-data/metapi/data:/app/data
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

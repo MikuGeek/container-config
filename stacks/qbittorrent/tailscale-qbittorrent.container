@@ -1,0 +1,27 @@
+[Unit]
+Description=Tailscale sidecar for qbittorrent
+After=network-online.target
+After=qbittorrent-pod.service
+Requires=qbittorrent-pod.service
+Wants=network-online.target
+
+[Container]
+Image=docker.io/tailscale/tailscale:stable
+ContainerName=qbittorrent-tailscale
+HostName=qbittorrent
+Pod=qbittorrent.pod
+
+Environment=TS_EXTRA_ARGS=--advertise-tags=tag:service-nonsensitive
+Environment=TS_STATE_DIR=/var/lib/tailscale
+Environment=TS_USERSPACE=true
+EnvironmentFile=%h/container-config/env/shared/tailscale.env
+
+Volume=%h/container-data/qbittorrent/tailscale-state:/var/lib/tailscale:Z,U
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

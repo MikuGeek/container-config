@@ -1,0 +1,8 @@
+[Unit]
+Description=Pod for metapi
+
+[Pod]
+PodName=metapi
+
+[Install]
+WantedBy=default.target

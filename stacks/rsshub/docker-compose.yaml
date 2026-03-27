@@ -1,0 +1,58 @@
+name: rsshub
+
+services:
+  tailscale-rsshub:
+    image: docker.io/tailscale/tailscale:stable
+    hostname: rsshub
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:service-nonsensitive
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/serve.json
+      - TS_USERSPACE=true
+    volumes:
+      - ${HOME}/container-data/rsshub/tailscale-state:/var/lib/tailscale:Z,U
+      - ./tailscale-serve.json:/serve.json:Z,U
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  rsshub:
+    image: ghcr.io/diygod/rsshub:chromium-bundled
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      CACHE_TYPE: redis
+      REDIS_URL: "redis://redis:6379/"
+      # START PRESONAL SECRETS
+      GITHUB_ACCESS_TOKEN: ${GITHUB_ACCESS_TOKEN}
+      PIXIV_REFRESHTOKEN: ${PIXIV_REFRESHTOKEN}
+      # END
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1200/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - tailscale-rsshub
+      - redis
+    network_mode: "service:tailscale-rsshub"
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  redis:
+    image: docker.io/redis:alpine
+    restart: unless-stopped
+    volumes:
+      - ${HOME}/container-data/rsshub/redis-data:/data:Z,U
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"

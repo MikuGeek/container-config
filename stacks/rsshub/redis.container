@@ -1,0 +1,25 @@
+[Unit]
+Description=Redis for RSSHub
+After=rsshub-pod.service
+Requires=rsshub-pod.service
+
+[Container]
+Image=docker.io/redis:alpine
+ContainerName=rsshub-redis
+Pod=rsshub.pod
+
+Volume=%h/container-data/rsshub/redis-data:/data:Z,U
+
+HealthCmd=redis-cli ping
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=5
+HealthStartPeriod=5s
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

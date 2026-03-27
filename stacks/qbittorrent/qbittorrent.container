@@ -1,0 +1,26 @@
+[Unit]
+Description=qbittorrent
+After=qbittorrent-pod.service tailscale-qbittorrent.service
+Requires=qbittorrent-pod.service tailscale-qbittorrent.service
+
+[Container]
+Image=docker.io/superng6/qbittorrentee
+ContainerName=qbittorrent
+Pod=qbittorrent.pod
+
+Environment=PUID=1000
+Environment=PGID=1000
+Environment=TZ=Asia/Hong_Kong
+Environment=WEBUIPORT=8080
+Environment=ENABLE_DOWNLOADS_PERM_FIX=true
+
+Volume=%h/container-data/qbittorrent/config:/config:Z
+Volume=%h/Downloads/qbittorrent:/downloads:Z
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

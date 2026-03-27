@@ -1,0 +1,39 @@
+name: n8n
+
+services:
+  tailscale-n8n:
+    image: docker.io/tailscale/tailscale:stable
+    hostname: n8n
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:service-nonsensitive
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/serve.json
+      - TS_USERSPACE=true
+    volumes:
+      - ${HOME}/container-data/n8n/tailscale-state:/var/lib/tailscale:Z,U
+      - ./tailscale-serve.json:/serve.json:Z,U
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    environment:
+      NODE_ENV: production
+      GENERIC_TIMEZONE: Asia/Singapore
+      TZ: Asia/Hong_Kong
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_RUNNERS_ENABLED: "true"
+      N8N_SECURE_COOKIE: "false"
+    volumes:
+      - ${HOME}/container-data/n8n/data:/home/node/.n8n:Z,U
+    restart: unless-stopped
+    depends_on:
+      - tailscale-n8n
+    network_mode: "service:tailscale-n8n"
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"

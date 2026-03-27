@@ -1,0 +1,39 @@
+name: qbittorrent
+
+services:
+  tailscale-qbittorrentee:
+    image: docker.io/tailscale/tailscale:stable
+    hostname: qbittorrent
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:service-nonsensitive
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=true
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+    volumes:
+      - ${HOME}/container-data/qbittorrent/tailscale-state:/var/lib/tailscale:Z,U
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  qbittorrentee:
+    image: docker.io/superng6/qbittorrentee
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Hong_Kong
+      - WEBUIPORT=8080
+      - ENABLE_DOWNLOADS_PERM_FIX=true
+    volumes:
+      - ${HOME}/container-data/qbittorrent/config:/config:Z
+      - ${HOME}/Downloads/qbittorrent:/downloads:Z
+    network_mode: "service:tailscale-qbittorrentee"
+    depends_on:
+      - tailscale-qbittorrentee
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"

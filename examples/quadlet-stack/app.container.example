@@ -1,0 +1,24 @@
+[Unit]
+Description=<stack>
+After=<stack>-pod.service tailscale-<stack>.service
+Requires=<stack>-pod.service tailscale-<stack>.service
+
+[Container]
+Image=<image>
+ContainerName=<stack>
+Pod=<stack>.pod
+
+# Add service-specific environment lines here.
+# Environment=KEY=value
+# EnvironmentFile=%h/container-config/<stack>/.env.app
+
+# Add service-specific volume lines here.
+# Volume=%h/container-data/<stack>/data:/data:Z,U
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,38 @@
+name: calibre-web
+
+services:
+  tailscale-calibre-web:
+    image: docker.io/tailscale/tailscale:stable
+    hostname: calibre-web
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:service-nonsensitive
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/serve.json
+      - TS_USERSPACE=true
+    volumes:
+      - ${HOME}/container-data/calibre-web/tailscale-state:/var/lib/tailscale:Z,U
+      - ./tailscale-serve.json:/serve.json:Z,U
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - DOCKER_MODS=linuxserver/mods:universal-calibre
+    volumes:
+      - ${HOME}/container-data/calibre-web/config:/config:U
+      - ${HOME}/container-data/calibre-web/books:/books:U
+    restart: unless-stopped
+    depends_on:
+      - tailscale-calibre-web
+    network_mode: "service:tailscale-calibre-web"
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"

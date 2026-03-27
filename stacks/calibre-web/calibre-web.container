@@ -1,0 +1,25 @@
+[Unit]
+Description=calibre-web
+After=calibre-web-pod.service tailscale-calibre-web.service
+Requires=calibre-web-pod.service tailscale-calibre-web.service
+
+[Container]
+Image=lscr.io/linuxserver/calibre-web:latest
+ContainerName=calibre-web
+Pod=calibre-web.pod
+
+Environment=PUID=1000
+Environment=PGID=1000
+Environment=TZ=Etc/UTC
+Environment=DOCKER_MODS=linuxserver/mods:universal-calibre
+
+Volume=%h/container-data/calibre-web/config:/config:U
+Volume=%h/container-data/calibre-web/books:/books:U
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

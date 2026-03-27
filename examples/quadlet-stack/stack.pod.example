@@ -1,0 +1,8 @@
+[Unit]
+Description=Pod for <stack>
+
+[Pod]
+PodName=<stack>
+
+[Install]
+WantedBy=default.target

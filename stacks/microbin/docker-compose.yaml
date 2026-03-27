@@ -1,0 +1,42 @@
+name: microbin
+
+services:
+  tailscale-microbin:
+    image: docker.io/tailscale/tailscale:stable
+    hostname: microbin
+    environment:
+      - TS_EXTRA_ARGS=--advertise-tags=tag:container
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/serve.json
+      - TS_USERSPACE=true
+    volumes:
+      - ${HOME}/container-data/microbin/tailscale-state:/var/lib/tailscale:Z,U
+      - ./tailscale-serve.json:/serve.json:Z,U
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  microbin:
+    image: danielszabo99/microbin:latest
+    restart: unless-stopped
+    depends_on:
+      - tailscale-microbin
+    network_mode: "service:tailscale-microbin"
+    volumes:
+      - ${HOME}/container-data/microbin/data:/app/microbin_data:Z,U
+    environment:
+      # --- no auth ---
+      - MICROBIN_EDITABLE=true
+      - MICROBIN_ETERNAL_PASTA=true
+      - MICROBIN_QR=true
+      - MICROBIN_WIDE=true
+      - MICROBIN_NO_LISTING=false
+      - MICROBIN_HIGHLIGHTSYNTAX=true
+      # --- Tailnet access ---
+      - MICROBIN_PUBLIC_PATH=https://microbin.python-everest.ts.net
+      - MICROBIN_BIND=0.0.0.0
+      - MICROBIN_PORT=8080
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"

@@ -1,0 +1,36 @@
+name: <service name>
+
+services:
+  tailscale-<service name>:
+    image: docker.io/tailscale/tailscale:stable
+    hostname: metapi
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:service-nonsensitive
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_SERVE_CONFIG=/serve.json
+      - TS_USERSPACE=true
+    volumes:
+      - ${HOME}/container-data/metapi/tailscale-state:/var/lib/tailscale:Z,U
+      - ./tailscale-serve.json:/serve.json:Z,U
+    restart: unless-stopped
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"
+
+  <service name>:
+    image: <service image>
+    volumes:
+      - ${HOME}/container-data/<service name>/<service related data>
+      - ...
+    environment:
+      - <service envs>
+    # ports:
+    # Please disable the original port exposure here.
+    restart: unless-stopped
+    depends_on:
+      - tailscale-<service name>
+    network_mode: "service:tailscale-<service name>"
+    # autoupdate
+    labels:
+      - "io.containers.autoupdate=registry"

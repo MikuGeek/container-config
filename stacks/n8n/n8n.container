@@ -1,0 +1,26 @@
+[Unit]
+Description=n8n
+After=n8n-pod.service tailscale-n8n.service
+Requires=n8n-pod.service tailscale-n8n.service
+
+[Container]
+Image=docker.n8n.io/n8nio/n8n
+ContainerName=n8n
+Pod=n8n.pod
+
+Environment=NODE_ENV=production
+Environment=GENERIC_TIMEZONE=Asia/Singapore
+Environment=TZ=Asia/Hong_Kong
+Environment=N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+Environment=N8N_RUNNERS_ENABLED=true
+Environment=N8N_SECURE_COOKIE=false
+
+Volume=%h/container-data/n8n/data:/home/node/.n8n:Z,U
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

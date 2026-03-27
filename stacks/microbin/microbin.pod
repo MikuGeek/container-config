@@ -1,0 +1,8 @@
+[Unit]
+Description=Pod for Microbin
+
+[Pod]
+PodName=microbin
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Pod for qbittorrent
+
+[Pod]
+PodName=qbittorrent
+PublishPort=6881:6881
+PublishPort=6881:6881/udp
+
+[Install]
+WantedBy=default.target

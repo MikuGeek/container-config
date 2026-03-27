@@ -1,0 +1,27 @@
+[Unit]
+Description=RSSHub
+After=rsshub-pod.service tailscale-rsshub.service redis.service
+Requires=rsshub-pod.service tailscale-rsshub.service redis.service
+
+[Container]
+Image=ghcr.io/diygod/rsshub:chromium-bundled
+ContainerName=rsshub
+Pod=rsshub.pod
+
+Environment=NODE_ENV=production
+Environment=CACHE_TYPE=redis
+Environment=REDIS_URL=redis://127.0.0.1:6379/
+EnvironmentFile=%h/container-config/stacks/rsshub/.env.app
+
+HealthCmd=curl -f http://localhost:1200/healthz
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+
+Label=io.containers.autoupdate=registry
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
