@@ -102,8 +102,7 @@ When a stack has a `<stack>.target`, prefer operating and enabling that target i
 
 At the moment this repository uses a mixed control model:
 
-- target-managed: `n8n`, `microbin`, `qbittorrent`, `calibre-web`, `rsshub`
-- direct Quadlet units: `metapi`
+- target-managed: `n8n`, `microbin`, `qbittorrent`, `calibre-web`, `rsshub`, `metapi`
 
 ## Auto Update
 

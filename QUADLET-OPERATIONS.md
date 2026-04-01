@@ -25,9 +25,6 @@ Current target-managed stacks in this repository:
 - `qbittorrent`
 - `calibre-web`
 - `rsshub`
-
-Current non-target stack in this repository:
-
 - `metapi`
 
 Examples:
@@ -56,9 +53,7 @@ systemctl --user start n8n.service
 Example for `metapi`:
 
 ```bash
-systemctl --user start metapi-pod.service
-systemctl --user start tailscale-metapi.service
-systemctl --user start metapi.service
+systemctl --user start metapi.target
 ```
 
 ## Stop One Stack

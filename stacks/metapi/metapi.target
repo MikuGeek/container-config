@@ -1,0 +1,7 @@
+[Unit]
+Description=metapi stack
+Wants=metapi-pod.service tailscale-metapi.service metapi.service
+After=metapi-pod.service tailscale-metapi.service metapi.service
+
+[Install]
+WantedBy=default.target

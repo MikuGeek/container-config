@@ -1,5 +1,6 @@
 [Unit]
 Description=metapi
+PartOf=metapi.target
 After=metapi-pod.service tailscale-metapi.service
 Requires=metapi-pod.service tailscale-metapi.service
 
@@ -21,6 +22,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

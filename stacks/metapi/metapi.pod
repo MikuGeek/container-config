@@ -1,8 +1,6 @@
 [Unit]
 Description=Pod for metapi
+PartOf=metapi.target
 
 [Pod]
 PodName=metapi
-
-[Install]
-WantedBy=default.target
