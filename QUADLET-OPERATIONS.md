@@ -32,27 +32,6 @@ Examples:
 ```bash
 systemctl --user start n8n.target
 systemctl --user start microbin.target
-```
-
-If you are working on an older stack that does not yet have a target, start in this order:
-
-```bash
-systemctl --user start <stack>-pod.service
-systemctl --user start tailscale-<stack>.service
-systemctl --user start <app>.service
-```
-
-Legacy example:
-
-```bash
-systemctl --user start n8n-pod.service
-systemctl --user start tailscale-n8n.service
-systemctl --user start n8n.service
-```
-
-Example for `metapi`:
-
-```bash
 systemctl --user start metapi.target
 ```
 
@@ -65,14 +44,6 @@ systemctl --user stop <stack>.target
 ```
 
 After stopping a target, wait a few seconds before checking status so Podman-generated units can finish pod removal.
-
-If you are working on an older stack that does not yet have a target, stop in reverse order:
-
-```bash
-systemctl --user stop <app>.service
-systemctl --user stop tailscale-<stack>.service
-systemctl --user stop <stack>-pod.service
-```
 
 ## Restart Only The App
 
@@ -117,19 +88,6 @@ Restore with:
 systemctl --user unmask <stack>.target
 ```
 
-If you are working on an older stack that does not yet have a target:
-
-```bash
-systemctl --user mask --runtime <app>.service tailscale-<stack>.service <stack>-pod.service
-systemctl --user stop <app>.service tailscale-<stack>.service <stack>-pod.service
-```
-
-Restore with:
-
-```bash
-systemctl --user unmask <app>.service tailscale-<stack>.service <stack>-pod.service
-```
-
 ## Check Status
 
 For target-managed stacks:
@@ -140,13 +98,6 @@ podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
 ```
 
 If a stack has just been stopped, re-run the command after a short wait to confirm the final inactive state.
-
-Legacy non-target pattern:
-
-```bash
-systemctl --user status <stack>-pod.service tailscale-<stack>.service <app>.service
-podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
-```
 
 ## Check All Stacks
 
