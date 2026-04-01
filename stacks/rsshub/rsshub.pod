@@ -1,6 +1,8 @@
 [Unit]
 Description=Pod for RSSHub
-PartOf=rsshub.target
 
 [Pod]
 PodName=rsshub
+
+[Install]
+WantedBy=default.target

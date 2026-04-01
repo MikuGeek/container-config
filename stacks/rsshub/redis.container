@@ -1,6 +1,5 @@
 [Unit]
 Description=Redis for RSSHub
-PartOf=rsshub.target
 After=rsshub-pod.service
 Requires=rsshub-pod.service
 
@@ -21,3 +20,6 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
+
+[Install]
+WantedBy=default.target

@@ -8,25 +8,9 @@ These commands are for user-level Quadlet units managed through systemd.
 systemctl --user daemon-reload
 ```
 
-If a stack uses `<stack>.target`, make sure the target is linked into `~/.config/systemd/user/`, not `~/.config/containers/systemd/`.
-
 ## Start One Stack
 
-Prefer a stack target when one exists:
-
-```bash
-systemctl --user start <stack>.target
-```
-
-Example for `rsshub`:
-
-```bash
-systemctl --user start rsshub.target
-```
-
-The `rsshub.target` file itself should be linked into `~/.config/systemd/user/rsshub.target`.
-
-If a stack does not yet have a target, start in this order:
+Start in this order:
 
 ```bash
 systemctl --user start <stack>-pod.service
@@ -42,23 +26,18 @@ systemctl --user start tailscale-n8n.service
 systemctl --user start n8n.service
 ```
 
-## Stop One Stack
-
-Prefer a stack target when one exists:
-
-```bash
-systemctl --user stop <stack>.target
-```
-
 Example for `rsshub`:
 
 ```bash
-systemctl --user stop rsshub.target
+systemctl --user start rsshub-pod.service
+systemctl --user start tailscale-rsshub.service
+systemctl --user start redis.service
+systemctl --user start rsshub.service
 ```
 
-For Podman-generated units, a stopped stack may briefly show a member unit as `failed` during teardown even when the containers are already gone. Confirm with `podman ps` if needed.
+## Stop One Stack
 
-If a stack does not yet have a target, stop in reverse order:
+Stop in reverse order:
 
 ```bash
 systemctl --user stop <app>.service
@@ -92,24 +71,7 @@ systemctl --user start <app>.service
 
 Adjust support container names where needed, for example `rsshub-redis`.
 
-For `rsshub`, the support service name is `redis-rsshub.service` and the runtime container name remains `rsshub-redis`.
-
 ## Temporary Disable
-
-Prefer masking the stack target when one exists:
-
-```bash
-systemctl --user mask --runtime <stack>.target
-systemctl --user stop <stack>.target
-```
-
-Restore with:
-
-```bash
-systemctl --user unmask <stack>.target
-```
-
-If a stack does not yet have a target:
 
 ```bash
 systemctl --user mask --runtime <app>.service tailscale-<stack>.service <stack>-pod.service
@@ -123,22 +85,6 @@ systemctl --user unmask <app>.service tailscale-<stack>.service <stack>-pod.serv
 ```
 
 ## Check Status
-
-Prefer checking the stack target and its members when one exists:
-
-```bash
-systemctl --user status <stack>.target <stack>-pod.service tailscale-<stack>.service <app>.service
-podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
-```
-
-For `rsshub`:
-
-```bash
-systemctl --user status rsshub.target rsshub-pod.service tailscale-rsshub.service redis-rsshub.service rsshub.service
-podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
-```
-
-If a stack does not yet have a target:
 
 ```bash
 systemctl --user status <stack>-pod.service tailscale-<stack>.service <app>.service
@@ -183,12 +129,6 @@ systemctl --user start podman-auto-update.service
 
 ```bash
 journalctl --user -u <stack>-pod.service -u tailscale-<stack>.service -u <app>.service -n 120 --no-pager
-```
-
-For `rsshub`:
-
-```bash
-journalctl --user -u rsshub-pod.service -u tailscale-rsshub.service -u redis-rsshub.service -u rsshub.service -n 120 --no-pager
 ```
 
 ## Do Not Do This

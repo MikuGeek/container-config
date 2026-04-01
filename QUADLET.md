@@ -9,7 +9,6 @@ This file is a compact reference for the current Quadlet structure used in this 
 ## Canonical Per-Stack Files
 
 - `<stack>.pod`
-- optional `<stack>.target` as the stack-level control entrypoint
 - `tailscale-<stack>.container` when Tailscale is used
 - one or more app `.container` files
 - optional `.env.app` symlink for app-specific variables
@@ -45,10 +44,9 @@ Use this in app containers when app-local env is needed:
 For `rsshub`:
 
 - pod: `rsshub.pod`
-- stack target: `rsshub.target`
 - app container: `rsshub.container`
 - sidecar: `tailscale-rsshub.container`
-- support container: `redis-rsshub.container`
+- support container: `redis.container`
 - runtime container names:
   - `rsshub`
   - `rsshub-tailscale`
