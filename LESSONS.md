@@ -99,3 +99,12 @@ Use these rules when adding a new lesson:
   - Validate with:
     - `podman auto-update --dry-run`
 - Rule: For Quadlet auto-update to work, both the container label and the user timer must be present.
+
+### 8. `podman auto-update --dry-run` can look idle while checking registries
+
+- Title: Dry-run may appear stuck before the final table
+- Context: manual validation of Podman auto-update
+- Problem: `podman auto-update --dry-run` seemed to have no output for a while.
+- Cause: Podman was still querying multiple remote registries and only printed the summary table after those checks completed.
+- Fix: Wait for the final table output or use debug logging to confirm registry checks are still running.
+- Rule: Treat `podman auto-update --dry-run` as a network-bound check; lack of immediate output does not mean it is broken.

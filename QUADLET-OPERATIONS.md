@@ -99,6 +99,20 @@ Enable the user timer once:
 systemctl --user enable --now podman-auto-update.timer
 ```
 
+The current local policy is weekly auto-update through a user override.
+
+Check the effective timer definition:
+
+```bash
+systemctl --user cat podman-auto-update.timer
+```
+
+Check the next scheduled run:
+
+```bash
+systemctl --user list-timers --all | rg 'podman-auto-update|NEXT|LAST'
+```
+
 Preview what Podman would update:
 
 ```bash

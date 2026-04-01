@@ -93,6 +93,15 @@ Quadlet source files in this repo are linked into:
 
 Generated units are then managed through user systemd.
 
+## Auto Update
+
+Quadlet containers that should auto-update use the label:
+
+- `io.containers.autoupdate=registry`
+
+The repository currently assumes a user-level Podman auto-update timer with a weekly schedule.
+The operational commands are documented in `QUADLET-OPERATIONS.md`.
+
 ## Further Reading
 
 - `AGENTS.md`: AI and automation rules

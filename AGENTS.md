@@ -84,6 +84,13 @@ This file is the AI-first operating guide for this repository.
   - `journalctl --user -u <unit>`
 - For compose reference files, use `podman compose config` when validating syntax.
 
+## Auto-Update Rules
+
+- Quadlet containers use `io.containers.autoupdate=registry` when automatic image refresh is desired.
+- The user-level `podman-auto-update.timer` is enabled.
+- The current local policy is weekly auto-update via a user systemd override.
+- If you change the update cadence, also update `QUADLET-OPERATIONS.md` and `LESSONS.md`.
+
 ## Migration Note
 
 - The repository used to keep stack directories at the repo root.
