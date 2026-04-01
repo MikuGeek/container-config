@@ -29,10 +29,14 @@ This file is the AI-first operating guide for this repository.
 
 - Quadlet source files live in `stacks/<stack>/`.
 - Per stack, prefer this shape:
+  - optional `<stack>.target` for stack-level control
   - `<stack>.pod`
   - `tailscale-<stack>.container` when Tailscale is used
   - one or more app `.container` files
 - User Quadlet links live in `~/.config/containers/systemd/`.
+- User stack targets live in `~/.config/systemd/user/`.
+- If a stack uses `<stack>.target`, enable `default.target` through that target instead of individual Quadlet units.
+- Do not link plain systemd targets into `~/.config/containers/systemd/`; that directory is for Quadlet source files only.
 - Generated systemd units under `/run/user/.../systemd/generator/` must not be edited.
 
 ## Container Naming Rules

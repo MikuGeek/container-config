@@ -40,6 +40,7 @@ Each real stack should live in `stacks/<stack>/`.
 
 Typical files:
 
+- `<stack>.target` when the stack is managed as one user systemd entrypoint
 - `<stack>.pod`
 - `tailscale-<stack>.container` when the stack uses Tailscale
 - one or more app `.container` files
@@ -91,7 +92,13 @@ Quadlet source files in this repo are linked into:
 
 - `~/.config/containers/systemd/`
 
+Stack-level systemd targets are linked into:
+
+- `~/.config/systemd/user/`
+
 Generated units are then managed through user systemd.
+
+If a stack has a `<stack>.target`, prefer enabling and operating that target instead of enabling each generated unit separately.
 
 ## Auto Update
 

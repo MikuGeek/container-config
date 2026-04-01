@@ -1,0 +1,7 @@
+[Unit]
+Description=RSSHub stack
+Wants=rsshub-pod.service tailscale-rsshub.service redis-rsshub.service rsshub.service
+After=rsshub-pod.service tailscale-rsshub.service redis-rsshub.service rsshub.service
+
+[Install]
+WantedBy=default.target
