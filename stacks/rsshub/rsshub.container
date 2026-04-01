@@ -17,6 +17,11 @@ HealthCmd=curl -f http://localhost:1200/healthz
 HealthInterval=30s
 HealthTimeout=10s
 HealthRetries=3
+HealthStartupCmd=curl -f http://localhost:1200/healthz
+HealthStartupInterval=5s
+HealthStartupRetries=12
+HealthStartupSuccess=1
+HealthStartupTimeout=10s
 
 Label=io.containers.autoupdate=registry
 
