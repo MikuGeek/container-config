@@ -145,3 +145,30 @@ Use these rules when adding a new lesson:
   - Re-run `systemctl --user is-active ...`
   - Re-run `podman ps`
 - Rule: Treat the first post-stop read as an intermediate state; confirm the settled state before deciding a target stop failed.
+
+### 12. Full-stack checks must include both target-managed and non-target stacks
+
+- Title: Check all control entrypoints on mixed hosts
+- Context: host-level startup verification after migrating most stacks to stack targets
+- Problem: Looking only at target units missed `metapi`, which still uses direct `.pod` and `.container` control.
+- Cause: The repository now has a mixed control model: most stacks use `<stack>.target`, but `metapi` still uses direct Quadlet units.
+- Fix:
+  - Check target-managed stacks via their `.target` units
+  - Check `metapi` via `metapi-pod.service`, `tailscale-metapi.service`, and `metapi.service`
+  - Confirm with `podman ps`
+- Rule: When validating the whole host, include every active control entrypoint, not just stack targets.
+
+### 13. Some startup logs are warnings, not blockers
+
+- Title: Distinguish startup warnings from real failures
+- Context: full-stack start of `n8n`, `calibre-web`, and Tailscale sidecars
+- Problem: Service logs showed warnings that looked alarming during startup.
+- Cause:
+  - `n8n` warns about deprecated env and missing Python internal runner support
+  - `calibre-web` downloads and installs its Docker mod on startup
+  - Tailscale sidecars emit periodic network probe warnings
+- Fix:
+  - Confirm the unit remains `active`
+  - Confirm the container remains `Up` in `podman ps`
+  - Treat these logs as non-blocking unless the service actually exits or loops
+- Rule: Do not treat every startup warning as a failure; correlate logs with final unit and container state.

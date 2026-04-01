@@ -26,6 +26,10 @@ Current target-managed stacks in this repository:
 - `calibre-web`
 - `rsshub`
 
+Current non-target stack in this repository:
+
+- `metapi`
+
 Examples:
 
 ```bash
@@ -47,6 +51,14 @@ Example for `n8n`:
 systemctl --user start n8n-pod.service
 systemctl --user start tailscale-n8n.service
 systemctl --user start n8n.service
+```
+
+Example for `metapi`:
+
+```bash
+systemctl --user start metapi-pod.service
+systemctl --user start tailscale-metapi.service
+systemctl --user start metapi.service
 ```
 
 ## Stop One Stack
@@ -140,6 +152,23 @@ For non-target stacks:
 systemctl --user status <stack>-pod.service tailscale-<stack>.service <app>.service
 podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
 ```
+
+## Check All Stacks
+
+Use this when you want a host-level view after startup or maintenance:
+
+```bash
+systemctl --user status n8n.target microbin.target qbittorrent.target calibre-web.target rsshub.target metapi-pod.service tailscale-metapi.service metapi.service
+podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'
+```
+
+During startup, some logs are expected warnings rather than failures:
+
+- `n8n` may warn about deprecated env or missing Python internal runner support
+- `calibre-web` may spend time downloading and installing its Docker mod
+- Tailscale sidecars may emit periodic network probe warnings
+
+Use final unit state and `podman ps` to decide whether the stack is healthy.
 
 ## Auto Update
 

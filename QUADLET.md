@@ -70,3 +70,7 @@ Current stacks using stack targets:
 - `qbittorrent`
 - `calibre-web`
 - `rsshub`
+
+Current stack still using direct Quadlet units:
+
+- `metapi`

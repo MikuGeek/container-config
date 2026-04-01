@@ -100,6 +100,11 @@ Generated units are then managed through user systemd.
 
 When a stack has a `<stack>.target`, prefer operating and enabling that target instead of enabling each generated unit separately.
 
+At the moment this repository uses a mixed control model:
+
+- target-managed: `n8n`, `microbin`, `qbittorrent`, `calibre-web`, `rsshub`
+- direct Quadlet units: `metapi`
+
 ## Auto Update
 
 Quadlet containers that should auto-update use the label:

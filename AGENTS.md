@@ -87,6 +87,7 @@ This file is the AI-first operating guide for this repository.
   - `podman ps`
   - `journalctl --user -u <unit>`
 - For stack targets, validate both `start <stack>.target` and `stop <stack>.target`, then confirm the final state after a short wait instead of reading only the intermediate `deactivating` state.
+- For a full host-level stack check, validate all target-managed stacks plus any remaining non-target stacks such as `metapi`, and confirm both systemd active states and `podman ps` output.
 - For compose reference files, use `podman compose config` when validating syntax.
 
 ## Auto-Update Rules
