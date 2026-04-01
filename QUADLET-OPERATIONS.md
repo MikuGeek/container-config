@@ -91,6 +91,26 @@ systemctl --user status <stack>-pod.service tailscale-<stack>.service <app>.serv
 podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
 ```
 
+## Auto Update
+
+Enable the user timer once:
+
+```bash
+systemctl --user enable --now podman-auto-update.timer
+```
+
+Preview what Podman would update:
+
+```bash
+podman auto-update --dry-run
+```
+
+Run one update check immediately:
+
+```bash
+systemctl --user start podman-auto-update.service
+```
+
 ## Logs
 
 ```bash
