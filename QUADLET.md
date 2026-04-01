@@ -53,10 +53,11 @@ Use this in app containers when app-local env is needed:
 
 For `rsshub`:
 
+- stack target: `rsshub.target`
 - pod: `rsshub.pod`
 - app container: `rsshub.container`
 - sidecar: `tailscale-rsshub.container`
-- support container: `redis.container`
+- support container: `redis-rsshub.container`
 - runtime container names:
   - `rsshub`
   - `rsshub-tailscale`
@@ -68,3 +69,4 @@ Current stacks using stack targets:
 - `microbin`
 - `qbittorrent`
 - `calibre-web`
+- `rsshub`

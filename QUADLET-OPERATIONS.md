@@ -24,6 +24,7 @@ Current target-managed stacks in this repository:
 - `microbin`
 - `qbittorrent`
 - `calibre-web`
+- `rsshub`
 
 Examples:
 
@@ -91,6 +92,8 @@ systemctl --user start <app>.service
 ```
 
 Adjust support container names where needed, for example `rsshub-redis`.
+
+For `rsshub`, the support service name is `redis-rsshub.service` and the runtime container name remains `rsshub-redis`.
 
 ## Temporary Disable
 

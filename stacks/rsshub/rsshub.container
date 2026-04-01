@@ -1,7 +1,8 @@
 [Unit]
 Description=RSSHub
-After=rsshub-pod.service tailscale-rsshub.service redis.service
-Requires=rsshub-pod.service tailscale-rsshub.service redis.service
+PartOf=rsshub.target
+After=rsshub-pod.service tailscale-rsshub.service redis-rsshub.service
+Requires=rsshub-pod.service tailscale-rsshub.service redis-rsshub.service
 
 [Container]
 Image=ghcr.io/diygod/rsshub:chromium-bundled
@@ -27,6 +28,4 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target
+SuccessExitStatus=143
