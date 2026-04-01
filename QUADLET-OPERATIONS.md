@@ -34,7 +34,7 @@ systemctl --user start n8n.target
 systemctl --user start microbin.target
 ```
 
-If a stack does not yet have a target, start in this order:
+If you are working on an older stack that does not yet have a target, start in this order:
 
 ```bash
 systemctl --user start <stack>-pod.service
@@ -42,7 +42,7 @@ systemctl --user start tailscale-<stack>.service
 systemctl --user start <app>.service
 ```
 
-Example for `n8n`:
+Legacy example:
 
 ```bash
 systemctl --user start n8n-pod.service
@@ -66,7 +66,7 @@ systemctl --user stop <stack>.target
 
 After stopping a target, wait a few seconds before checking status so Podman-generated units can finish pod removal.
 
-If a stack does not yet have a target, stop in reverse order:
+If you are working on an older stack that does not yet have a target, stop in reverse order:
 
 ```bash
 systemctl --user stop <app>.service
@@ -117,7 +117,7 @@ Restore with:
 systemctl --user unmask <stack>.target
 ```
 
-If a stack does not yet have a target:
+If you are working on an older stack that does not yet have a target:
 
 ```bash
 systemctl --user mask --runtime <app>.service tailscale-<stack>.service <stack>-pod.service
@@ -141,7 +141,7 @@ podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
 
 If a stack has just been stopped, re-run the command after a short wait to confirm the final inactive state.
 
-For non-target stacks:
+Legacy non-target pattern:
 
 ```bash
 systemctl --user status <stack>-pod.service tailscale-<stack>.service <app>.service
@@ -153,7 +153,7 @@ podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
 Use this when you want a host-level view after startup or maintenance:
 
 ```bash
-systemctl --user status n8n.target microbin.target qbittorrent.target calibre-web.target rsshub.target metapi-pod.service tailscale-metapi.service metapi.service
+systemctl --user status n8n.target microbin.target qbittorrent.target calibre-web.target rsshub.target metapi.target
 podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'
 ```
 

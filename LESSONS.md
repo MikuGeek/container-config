@@ -146,17 +146,17 @@ Use these rules when adding a new lesson:
   - Re-run `podman ps`
 - Rule: Treat the first post-stop read as an intermediate state; confirm the settled state before deciding a target stop failed.
 
-### 12. Full-stack checks must include both target-managed and non-target stacks
+### 12. Full-stack checks should use stack targets as the primary entrypoints
 
-- Title: Check all control entrypoints on mixed hosts
-- Context: host-level startup verification after migrating most stacks to stack targets
-- Problem: Looking only at target units missed `metapi`, which still uses direct `.pod` and `.container` control.
-- Cause: The repository now has a mixed control model: most stacks use `<stack>.target`, but `metapi` still uses direct Quadlet units.
+- Title: Validate the whole host through stack targets
+- Context: host-level startup verification after migrating all stacks to stack targets
+- Problem: Checking only member services makes the host-level view noisy and harder to compare across stacks.
+- Cause: Pod, sidecar, and app units expose implementation details, while the stack target is the intended operational entrypoint.
 - Fix:
-  - Check target-managed stacks via their `.target` units
-  - Check `metapi` via `metapi-pod.service`, `tailscale-metapi.service`, and `metapi.service`
-  - Confirm with `podman ps`
-- Rule: When validating the whole host, include every active control entrypoint, not just stack targets.
+  - Check each `<stack>.target`
+  - Add member units only when you need deeper debugging
+  - Confirm runtime state with `podman ps`
+- Rule: For normal host-level verification, use stack targets as the primary control and status surface.
 
 ### 13. Some startup logs are warnings, not blockers
 

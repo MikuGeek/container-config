@@ -100,7 +100,7 @@ Generated units are then managed through user systemd.
 
 When a stack has a `<stack>.target`, prefer operating and enabling that target instead of enabling each generated unit separately.
 
-At the moment this repository uses a mixed control model:
+At the moment this repository uses stack targets for all active stacks:
 
 - target-managed: `n8n`, `microbin`, `qbittorrent`, `calibre-web`, `rsshub`, `metapi`
 
