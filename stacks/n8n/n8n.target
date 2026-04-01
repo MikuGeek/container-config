@@ -1,7 +1,6 @@
 [Unit]
 Description=n8n stack
 Wants=n8n-pod.service tailscale-n8n.service n8n.service
-After=n8n-pod.service tailscale-n8n.service n8n.service
 
 [Install]
 WantedBy=default.target

@@ -1,7 +1,6 @@
 [Unit]
 Description=calibre-web stack
 Wants=calibre-web-pod.service tailscale-calibre-web.service calibre-web.service
-After=calibre-web-pod.service tailscale-calibre-web.service calibre-web.service
 
 [Install]
 WantedBy=default.target
