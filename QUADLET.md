@@ -8,10 +8,20 @@ This file is a compact reference for the current Quadlet structure used in this 
 
 ## Canonical Per-Stack Files
 
+- optional `<stack>.target` as the stack-level control entrypoint
 - `<stack>.pod`
 - `tailscale-<stack>.container` when Tailscale is used
 - one or more app `.container` files
 - optional `.env.app` symlink for app-specific variables
+
+## Canonical Stack Control Pattern
+
+- put `<stack>.target` in `stacks/<stack>/`
+- link the target into `~/.config/systemd/user/`
+- link `~/.config/systemd/user/default.target.wants/<stack>.target` to that user target
+- keep `.pod` and `.container` source links in `~/.config/containers/systemd/`
+- add `PartOf=<stack>.target` to the member `.pod` and `.container` files
+- remove member `WantedBy=default.target` when the stack target is the entrypoint
 
 ## Canonical Env Locations
 
@@ -51,3 +61,10 @@ For `rsshub`:
   - `rsshub`
   - `rsshub-tailscale`
   - `rsshub-redis`
+
+Current stacks using stack targets:
+
+- `n8n`
+- `microbin`
+- `qbittorrent`
+- `calibre-web`

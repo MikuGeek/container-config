@@ -108,3 +108,40 @@ Use these rules when adding a new lesson:
 - Cause: Podman was still querying multiple remote registries and only printed the summary table after those checks completed.
 - Fix: Wait for the final table output or use debug logging to confirm registry checks are still running.
 - Rule: Treat `podman auto-update --dry-run` as a network-bound check; lack of immediate output does not mean it is broken.
+
+### 9. Stack targets must be linked through user systemd, not Quadlet source links
+
+- Title: Put `<stack>.target` in `~/.config/systemd/user/`
+- Context: stack target migration for `n8n`, `microbin`, `qbittorrent`, and `calibre-web`
+- Problem: Plain systemd targets are not loaded when linked into `~/.config/containers/systemd/`.
+- Cause: That directory is consumed by the Podman Quadlet generator for `.pod` and `.container` sources, not normal systemd target units.
+- Fix:
+  - Keep source files in `stacks/<stack>/<stack>.target`
+  - Link them into `~/.config/systemd/user/<stack>.target`
+  - Link `default.target.wants/<stack>.target` to the user target file
+- Rule: Install stack-level targets through user systemd, not the Quadlet source directory.
+
+### 10. A stack target can replace direct `WantedBy=default.target` on members
+
+- Title: Use one target as the default stack entrypoint
+- Context: target migration for `n8n`, `microbin`, `qbittorrent`, and `calibre-web`
+- Problem: Managing pod, sidecar, and app units individually was repetitive and made the default startup path harder to understand.
+- Cause: Each member unit was installed directly into `default.target`.
+- Fix:
+  - Add `<stack>.target` with `Wants=` for the stack members
+  - Add `PartOf=<stack>.target` to the member `.pod` and `.container` files
+  - Remove member `WantedBy=default.target`
+  - Enable only the stack target for default startup
+- Rule: For stable stacks with one pod, one sidecar, and one app, prefer a single stack target as the default entrypoint.
+
+### 11. Target stop validation needs a delayed recheck
+
+- Title: Read the settled state, not the transition state
+- Context: validating `stop <stack>.target` on `n8n`, `microbin`, `qbittorrent`, and `calibre-web`
+- Problem: Immediate checks after `systemctl --user stop <stack>.target` showed `deactivating` units and still-running containers.
+- Cause: Podman-generated pod and container units need a short amount of time to stop and remove the pod infra container.
+- Fix:
+  - Wait a few seconds after the stop command
+  - Re-run `systemctl --user is-active ...`
+  - Re-run `podman ps`
+- Rule: Treat the first post-stop read as an intermediate state; confirm the settled state before deciding a target stop failed.

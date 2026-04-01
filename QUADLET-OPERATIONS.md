@@ -8,9 +8,31 @@ These commands are for user-level Quadlet units managed through systemd.
 systemctl --user daemon-reload
 ```
 
+If a stack has `<stack>.target`, make sure the target is linked into `~/.config/systemd/user/` and `~/.config/systemd/user/default.target.wants/`.
+
 ## Start One Stack
 
-Start in this order:
+Prefer a stack target when one exists:
+
+```bash
+systemctl --user start <stack>.target
+```
+
+Current target-managed stacks in this repository:
+
+- `n8n`
+- `microbin`
+- `qbittorrent`
+- `calibre-web`
+
+Examples:
+
+```bash
+systemctl --user start n8n.target
+systemctl --user start microbin.target
+```
+
+If a stack does not yet have a target, start in this order:
 
 ```bash
 systemctl --user start <stack>-pod.service
@@ -26,18 +48,17 @@ systemctl --user start tailscale-n8n.service
 systemctl --user start n8n.service
 ```
 
-Example for `rsshub`:
-
-```bash
-systemctl --user start rsshub-pod.service
-systemctl --user start tailscale-rsshub.service
-systemctl --user start redis.service
-systemctl --user start rsshub.service
-```
-
 ## Stop One Stack
 
-Stop in reverse order:
+Prefer a stack target when one exists:
+
+```bash
+systemctl --user stop <stack>.target
+```
+
+After stopping a target, wait a few seconds before checking status so Podman-generated units can finish pod removal.
+
+If a stack does not yet have a target, stop in reverse order:
 
 ```bash
 systemctl --user stop <app>.service
@@ -73,6 +94,21 @@ Adjust support container names where needed, for example `rsshub-redis`.
 
 ## Temporary Disable
 
+Prefer masking the stack target when one exists:
+
+```bash
+systemctl --user mask --runtime <stack>.target
+systemctl --user stop <stack>.target
+```
+
+Restore with:
+
+```bash
+systemctl --user unmask <stack>.target
+```
+
+If a stack does not yet have a target:
+
 ```bash
 systemctl --user mask --runtime <app>.service tailscale-<stack>.service <stack>-pod.service
 systemctl --user stop <app>.service tailscale-<stack>.service <stack>-pod.service
@@ -85,6 +121,17 @@ systemctl --user unmask <app>.service tailscale-<stack>.service <stack>-pod.serv
 ```
 
 ## Check Status
+
+For target-managed stacks:
+
+```bash
+systemctl --user status <stack>.target <stack>-pod.service tailscale-<stack>.service <app>.service
+podman ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'
+```
+
+If a stack has just been stopped, re-run the command after a short wait to confirm the final inactive state.
+
+For non-target stacks:
 
 ```bash
 systemctl --user status <stack>-pod.service tailscale-<stack>.service <app>.service

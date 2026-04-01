@@ -29,10 +29,14 @@ This file is the AI-first operating guide for this repository.
 
 - Quadlet source files live in `stacks/<stack>/`.
 - Per stack, prefer this shape:
+  - optional `<stack>.target` as the stack-level control entrypoint
   - `<stack>.pod`
   - `tailscale-<stack>.container` when Tailscale is used
   - one or more app `.container` files
 - User Quadlet links live in `~/.config/containers/systemd/`.
+- User stack targets live in `~/.config/systemd/user/`.
+- When a stack has `<stack>.target`, make that target the only `default.target` entrypoint instead of individual Quadlet units.
+- Do not link plain systemd targets into `~/.config/containers/systemd/`; that directory is only for Quadlet source files.
 - Generated systemd units under `/run/user/.../systemd/generator/` must not be edited.
 
 ## Container Naming Rules
@@ -82,6 +86,7 @@ This file is the AI-first operating guide for this repository.
   - `systemctl --user status`
   - `podman ps`
   - `journalctl --user -u <unit>`
+- For stack targets, validate both `start <stack>.target` and `stop <stack>.target`, then confirm the final state after a short wait instead of reading only the intermediate `deactivating` state.
 - For compose reference files, use `podman compose config` when validating syntax.
 
 ## Auto-Update Rules
