@@ -1,5 +1,6 @@
 [Unit]
 Description=Microbin
+PartOf=microbin.target
 After=microbin-pod.service tailscale-microbin.service
 Requires=microbin-pod.service tailscale-microbin.service
 
@@ -24,6 +25,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

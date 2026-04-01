@@ -1,0 +1,7 @@
+[Unit]
+Description=Microbin stack
+Wants=microbin-pod.service tailscale-microbin.service microbin.service
+After=microbin-pod.service tailscale-microbin.service microbin.service
+
+[Install]
+WantedBy=default.target

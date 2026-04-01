@@ -1,8 +1,6 @@
 [Unit]
 Description=Pod for Microbin
+PartOf=microbin.target
 
 [Pod]
 PodName=microbin
-
-[Install]
-WantedBy=default.target

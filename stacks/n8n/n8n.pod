@@ -1,8 +1,6 @@
 [Unit]
 Description=Pod for n8n
+PartOf=n8n.target
 
 [Pod]
 PodName=n8n
-
-[Install]
-WantedBy=default.target

@@ -1,5 +1,6 @@
 [Unit]
 Description=Tailscale sidecar for calibre-web
+PartOf=calibre-web.target
 After=network-online.target
 After=calibre-web-pod.service
 Requires=calibre-web-pod.service
@@ -24,6 +25,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

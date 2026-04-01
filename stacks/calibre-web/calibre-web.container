@@ -1,5 +1,6 @@
 [Unit]
 Description=calibre-web
+PartOf=calibre-web.target
 After=calibre-web-pod.service tailscale-calibre-web.service
 Requires=calibre-web-pod.service tailscale-calibre-web.service
 
@@ -20,6 +21,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

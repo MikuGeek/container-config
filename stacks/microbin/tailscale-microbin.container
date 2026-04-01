@@ -1,5 +1,6 @@
 [Unit]
 Description=Tailscale sidecar for Microbin
+PartOf=microbin.target
 After=network-online.target
 After=microbin-pod.service
 Requires=microbin-pod.service
@@ -23,6 +24,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

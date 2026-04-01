@@ -1,5 +1,6 @@
 [Unit]
 Description=n8n
+PartOf=n8n.target
 After=n8n-pod.service tailscale-n8n.service
 Requires=n8n-pod.service tailscale-n8n.service
 
@@ -21,6 +22,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

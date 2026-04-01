@@ -1,8 +1,6 @@
 [Unit]
 Description=Pod for calibre-web
+PartOf=calibre-web.target
 
 [Pod]
 PodName=calibre-web
-
-[Install]
-WantedBy=default.target

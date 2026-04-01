@@ -1,5 +1,6 @@
 [Unit]
 Description=qbittorrent
+PartOf=qbittorrent.target
 After=qbittorrent-pod.service tailscale-qbittorrent.service
 Requires=qbittorrent-pod.service tailscale-qbittorrent.service
 
@@ -21,6 +22,3 @@ Label=io.containers.autoupdate=registry
 
 [Service]
 Restart=always
-
-[Install]
-WantedBy=default.target

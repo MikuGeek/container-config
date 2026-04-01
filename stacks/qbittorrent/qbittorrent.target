@@ -1,0 +1,7 @@
+[Unit]
+Description=qbittorrent stack
+Wants=qbittorrent-pod.service tailscale-qbittorrent.service qbittorrent.service
+After=qbittorrent-pod.service tailscale-qbittorrent.service qbittorrent.service
+
+[Install]
+WantedBy=default.target
